@@ -17,25 +17,25 @@ class DupAndBadCode
   
   def first
     if true
-      puts 'a'
+      a.b()
     else
-      puts 'b'
+      a.b()
     end
   end
-  
+
   def second
     if true
-      puts 'a'
+      a.b()
     else
-      puts 'b'
-    end
+      a.b()
+    end  
   end
-  
+
   def third
     if true
-      puts 'a'
+      a.b()
     else
-      puts 'b'
+      a.b()
     end
   end  
 end
