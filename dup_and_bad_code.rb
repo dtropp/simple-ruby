@@ -16,29 +16,26 @@ class DupAndBadCode
   end
   
   def first
-    puts 'a'
-    puts 'a'
-    puts 'a'    
-    puts 'a'
-    puts 'a'
-    puts 'a'
+    if true
+      puts 'a'
+    else
+      puts 'b'
+    end
   end
   
   def second
-    puts 'a'
-    puts 'a'
-    puts 'a'    
-    puts 'a'
-    puts 'a'
-    puts 'a'
+    if true
+      puts 'a'
+    else
+      puts 'b'
+    end
   end
   
   def third
-    puts 'a'
-    puts 'a'
-    puts 'a'    
-    puts 'a'
-    puts 'a'
-    puts 'a'
+    if true
+      puts 'a'
+    else
+      puts 'b'
+    end
   end  
 end
