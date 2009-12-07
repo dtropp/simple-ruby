@@ -112,30 +112,6 @@ class Chaser
   ############################################################
   ### Running the script
 
-  def validate
-    @reporter.method_loaded(klass_name, method_name)
-
-    begin
-      modify_method
-      timeout(@@timeout, Chaser::Timeout) { run_tests }
-    rescue Chaser::Timeout
-      @reporter.warning "Your tests timed out. Chaser may have caused an infinite loop."
-    rescue Interrupt
-      @reporter.warning 'Mutation canceled, hit ^C again to exit'
-      sleep 2
-    end
-
-    unmodify_method # in case we're validating again. we should clean up.
-
-    if @failure
-      @reporter.report_failure
-      false
-    else
-      @reporter.no_surviving_mutant
-      true
-    end
-  end
-
   def record_passing_mutation
     @failure = true
   end
@@ -167,53 +143,6 @@ class Chaser
     chaser_proxy_method_name = calculate_proxy_method_name(clean_method_name)
     aliasing_class(@method_name).send(:define_method, chaser_proxy_method_name) do |block, *args|
       chaser.old_method.bind(self).call(*args) {|*yielded_values| block.call(*yielded_values)}
-    end
-  end
-
-  # Ruby 1.8 doesn't allow define_method to handle blocks.
-  # The blog post http://coderrr.wordpress.com/2008/10/29/using-define_method-with-blocks-in-ruby-18/
-  # show that define_method has problems, and showed how to do workaround_method_code_string
-  def modify_instance_method
-    chaser = self
-    @mutated = true
-    @old_method = @klass.instance_method(@method_name)
-    chaser_proxy_method_name = calculate_proxy_method_name(@method_name)
-    workaround_method_code_string = <<-EOM
-      def #{@method_name}(*args, &block)
-        #{chaser_proxy_method_name}(block, *args)
-      end
-    EOM
-    @klass.class_eval do
-      eval(workaround_method_code_string)
-    end
-    @klass.send(:define_method, chaser_proxy_method_name) do |block, *args|
-      original_value = chaser.old_method.bind(self).call(*args) do |*yielded_values|
-        mutated_yielded_values = yielded_values.map{|value| chaser.mutate_value(value)}
-        block.call(*mutated_yielded_values)
-      end
-      chaser.mutate_value(original_value)
-    end
-  end
-
-  def modify_class_method
-    chaser = self
-    @mutated = true
-    @old_method = aliasing_class(@method_name).instance_method(clean_method_name)
-    chaser_proxy_method_name = calculate_proxy_method_name(clean_method_name)
-    workaround_method_code_string = <<-EOM
-      def #{@method_name}(*args, &block)
-        #{chaser_proxy_method_name}(block, *args)
-      end
-    EOM
-    @klass.class_eval do
-      eval(workaround_method_code_string)
-    end
-    aliasing_class(@method_name).send(:define_method, chaser_proxy_method_name) do |block, *args|
-      original_value = chaser.old_method.bind(self).call(*args) do |*yielded_values|
-        mutated_yielded_values = yielded_values.map{|value| chaser.mutate_value(value)}
-        block.call(*mutated_yielded_values)
-      end
-      chaser.mutate_value(original_value)
     end
   end
 
