@@ -1,4 +1,10 @@
 class DupAndBadCode
+  def initialize
+    @a = 1
+    @b = 2
+    @c = 3
+  end
+  
   def conditional_hell(a,b,c)
     if a
       if b
@@ -17,25 +23,25 @@ class DupAndBadCode
   
   def first
     if true
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     else
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     end
   end
 
   def second
     if true
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     else
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     end  
   end
 
   def third
     if true
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     else
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     end
   end  
 end

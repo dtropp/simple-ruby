@@ -1,25 +1,31 @@
 class DupCode
+  def initialize
+    @a = 1
+    @b = 2
+    @c = 3
+  end
+  
   def first
     if true
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     else
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     end
   end
-  
+
   def second
     if true
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     else
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     end  
   end
-  
+
   def third
     if true
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     else
-      a.b()
+      BadCode.new.conditional_hell @a, @b, @c
     end
   end
 end        
