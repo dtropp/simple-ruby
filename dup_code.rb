@@ -2,7 +2,7 @@ require 'rubygems'
 require 'timeout'
 require 'world'
 
-class String # :nodoc:
+class Changed # :nodoc:
   def to_class
     split(/::/).inject(Object) { |klass, name| klass.const_get(name) }
   end
